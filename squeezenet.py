@@ -11,7 +11,6 @@ from keras.applications.imagenet_utils import _obtain_input_shape
 from keras.utils.data_utils import get_file
 
 WEIGHTS_PATH = 'https://github.com/wohlert/keras-squeezenet/releases/download/v0.1/squeezenet_weights.h5'
-WEIGHTS_PATH = './squeezenet_weights.h5'
 
 def _fire(x, filters, name="fire"):
     sq_filters, ex1_filters, ex2_filters = filters
@@ -49,21 +48,21 @@ def SqueezeNet(include_top=True, weights="imagenet", input_tensor=None, input_sh
     x = Convolution2D(64, kernel_size=(3, 3), strides=(2, 2), padding="same", activation="relu", name='conv1')(img_input)
     x = MaxPooling2D(pool_size=(3, 3), strides=(2, 2), name='maxpool1', padding="valid")(x)
 
-    x = fire(x, (16, 64, 64), name="fire2")
-    x = fire(x, (16, 64, 64), name="fire3")
+    x = _fire(x, (16, 64, 64), name="fire2")
+    x = _fire(x, (16, 64, 64), name="fire3")
 
     x = MaxPooling2D(pool_size=(3, 3), strides=(2, 2), name='maxpool3', padding="valid")(x)
 
-    x = fire(x, (32, 128, 128), name="fire4")
-    x = fire(x, (32, 128, 128), name="fire5")
+    x = _fire(x, (32, 128, 128), name="fire4")
+    x = _fire(x, (32, 128, 128), name="fire5")
 
     x = MaxPooling2D(pool_size=(3, 3), strides=(2, 2), name='maxpool5', padding="valid")(x)
 
-    x = fire(x, 48, 192, 192, name="fire6")
-    x = fire(x, 48, 192, 192, name="fire7")
+    x = _fire(x, (48, 192, 192), name="fire6")
+    x = _fire(x, (48, 192, 192), name="fire7")
 
-    x = fire(x, 64, 256, 256, name="fire8")
-    x = fire(x, 64, 256, 256, name="fire9")
+    x = _fire(x, (64, 256, 256), name="fire8")
+    x = _fire(x, (64, 256, 256), name="fire9")
 
     if include_top:
         x = Dropout(0.5, name='dropout9')(x)
@@ -88,6 +87,3 @@ def SqueezeNet(include_top=True, weights="imagenet", input_tensor=None, input_sh
         model.load_weights(weights_path)
 
     return model
-
-
-model = SqueezeNet()
