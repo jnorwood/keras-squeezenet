@@ -7,7 +7,8 @@ from keras.layers import GlobalMaxPooling2D, GlobalAveragePooling2D
 
 from keras.applications.imagenet_utils import decode_predictions
 from keras.applications.imagenet_utils import preprocess_input
-from keras.applications.imagenet_utils import _obtain_input_shape
+#modified in keras 2.2.2 see https://stackoverflow.com/questions/49113140/importerror-cannot-import-name-obtain-input-shape-from-keras
+from keras_applications.imagenet_utils import _obtain_input_shape
 from keras.utils.data_utils import get_file
 
 WEIGHTS_PATH = 'https://github.com/wohlert/keras-squeezenet/releases/download/v0.1/squeezenet_weights.h5'
@@ -35,7 +36,7 @@ def SqueezeNet(include_top=True, weights="imagenet", input_tensor=None, input_sh
                                       default_size=224,
                                       min_size=48,
                                       data_format=K.image_data_format(),
-                                      include_top=include_top)
+                                      require_flatten=include_top)
 
     if input_tensor is None:
         img_input = Input(shape=input_shape)
